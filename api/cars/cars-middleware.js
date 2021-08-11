@@ -17,7 +17,7 @@ const checkCarId = async(req, res, next) => {
 }
 
 const checkCarPayload = (req, res, next) => {
-  const {vin, make, model, milage } = req.body
+  const {vin, make, model, mileage } = req.body
   if(!vin){
     const error = {message: 'vin is missing', status:400}
     next(error)
@@ -27,8 +27,8 @@ const checkCarPayload = (req, res, next) => {
   }else if(!model){
     const error = {message: 'model is missing', status:400}
     next(error)
-  }else if(!milage){
-    const error = {message: 'milage is missing', status:400}
+  }else if(!mileage){
+    const error = {message: 'mileage is missing', status:400}
     next(error)
   }else{
     next()
@@ -49,9 +49,9 @@ const checkVinNumberValid = (req, res, next) => {
 
 const checkVinNumberUnique = async(req, res, next) => {
   try{
-    const taken = await db('cars').where('vin', req.vin)
+    const taken = await db('cars').where('vin', req.body.vin).first()
     if(taken){
-      next({status: 400, message: `vin ${req.vin} already exists`})
+      next({status: 400, message: `vin ${req.body.vin} already exists`})
     }else{
       next()
     }
